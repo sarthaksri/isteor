@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Lovely+Unicorn&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: rgb(4,4,14);
+  background: radial-gradient(circle, rgba(4,4,14,1) 0%, rgba(24,38,69,1) 0%, rgba(24,38,69,1) 29%, rgba(0,0,0,0.96) 100%);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.logo-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
+.title {
+  font-family: 'Lovely Unicorn', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  margin-top: 60px; 
+}
+
+.glassmorphism input {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.glassmorphism button {
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.glassmorphism button:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+
+@media (min-width: 768px) {
+  .glassmorphism {
+    max-width: 500px;
+    padding: 3rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .glassmorphism input {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+
+  .glassmorphism button {
+    padding: 1rem 2rem;
+  }
+}
+
