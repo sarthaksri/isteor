@@ -3,12 +3,14 @@
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background: rgb(4,4,14);
-  background: radial-gradient(circle, rgba(4,4,14,1) 0%, rgba(24,38,69,1) 0%, rgba(24,38,69,1) 29%, rgba(0,0,0,0.96) 100%);
+  /* background: rgb(4, 4, 14);
+  background: radial-gradient(circle, rgba(4, 4, 14, 1) 0%, rgba(24, 38, 69, 1) 0%, rgba(24, 38, 69, 1) 29%, rgba(0, 0, 0, 0.96) 100%); */
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url('./assets//sci_fi.jpg');
+  background-size: cover;
 }
 
 .form-container {
@@ -20,8 +22,9 @@ body {
 }
 
 .glassmorphism {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
+  background: rgba(16, 9, 9, 0.15);
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 2rem;
@@ -47,9 +50,11 @@ body {
 
 .title {
   font-family: 'Lovely Unicorn', sans-serif;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  margin-top: 60px; 
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  margin-top: 60px;
+  color: white;
+  opacity: 1;
 }
 
 .glassmorphism input {
@@ -87,7 +92,7 @@ body {
   }
 
   .title {
-    font-size: 2.5rem;
+    font-size: 2.75rem;
   }
 
   .glassmorphism input {
@@ -99,4 +104,3 @@ body {
     padding: 1rem 2rem;
   }
 }
-
