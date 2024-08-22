@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./form.css";
-import logo from "./istelogo.png";
+import logo from "./ISTE Thapar Chapter Logo .png";
 
 function RegistrationForm() {
 	const [formData, setFormData] = useState({
