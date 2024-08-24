@@ -9,6 +9,7 @@ body {
   align-items: center;
   background-image: url('./assets//sci_fi.jpg');
   background-size: cover;
+  background-position: center;
 }
 
 .form-container {
@@ -52,6 +53,8 @@ body {
 .logo {
   width: 150px;
   height: 100 px;
+  background-size: cover;
+  background-position: center;
 }
 
 .title {
