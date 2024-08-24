@@ -53,8 +53,6 @@ body {
 .logo {
   width: 150px;
   height: 100 px;
-  background-size: cover;
-  background-position: center;
 }
 
 .title {
