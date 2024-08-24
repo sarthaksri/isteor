@@ -6,7 +6,7 @@ function RegistrationForm() {
 	const {
 		register,
 		handleSubmit,
-		formState: { isSubmitting },
+		formState: { isSubmitting, errors },
 		reset,
 	} = useForm();
 
@@ -32,10 +32,19 @@ function RegistrationForm() {
 			JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
 		return !usedNumbers.includes(applicationNumber);
 	};
+	const validateFormData = (data) => {
+		const { name, branch, applicationNumber, contactInfo, email } = data;
+		return name && branch && applicationNumber && contactInfo && email;
+		// Add more validation logic if needed (e.g., email format, contact number format)
+	};
 
 	const onSubmit = (data) => {
 		// e.preventDefault();
 		console.log(data);
+		// if (errors) {
+		// 	alert("Please fill all the fields.");
+		// 	return;
+		// }
 
 		// Check if the application number has already been used
 		if (!isApplicationNumberUnique(data.applicationNumber)) {
@@ -65,6 +74,10 @@ function RegistrationForm() {
 		reset();
 	};
 
+	const Error = function ({ message }) {
+		return <span style={{ display: "block", color: "wheat" }}>{message}</span>;
+	};
+
 	return (
 		<div className="form-container">
 			<form
@@ -91,12 +104,16 @@ function RegistrationForm() {
 					})}
 					aria-label="Name"
 				/>
+				{errors.name && Error({ message: errors.name.message })}
+
 				<input
 					type="text"
 					placeholder="Branch"
 					{...register("branch", { required: "Branch is Required." })}
 					aria-label="Branch"
 				/>
+				{errors.branch && Error({ message: errors.branch.message })}
+
 				<input
 					type="text"
 					placeholder="Application Number"
@@ -113,6 +130,9 @@ function RegistrationForm() {
 					})}
 					aria-label="Application Number"
 				/>
+				{errors.applicationNumber &&
+					Error({ message: errors.applicationNumber.message })}
+
 				<input
 					type="text"
 					placeholder="Contact Info"
@@ -129,6 +149,8 @@ function RegistrationForm() {
 					})}
 					aria-label="Contact Info"
 				/>
+				{errors.contactInfo && Error({ message: errors.contactInfo.message })}
+
 				<input
 					type="email"
 					placeholder="Email"
@@ -141,7 +163,11 @@ function RegistrationForm() {
 					})}
 					aria-label="Email"
 				/>
-				<button type="submit">
+				{errors.email && Error({ message: errors.email.message })}
+				<button
+					type="submit"
+					style={{ marginTop: "1rem" }}
+				>
 					{isSubmitting ? "Registering..." : "Register"}
 				</button>
 			</form>
