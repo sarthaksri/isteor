@@ -1,175 +1,137 @@
+import React, { useState } from "react";
 import "./form.css";
 import logo from "./ISTE Thapar Chapter Logo .png";
-import { useForm } from "react-hook-form";
 
 function RegistrationForm() {
-	const {
-		register,
-		handleSubmit,
-		formState: { isSubmitting, errors },
-		reset,
-	} = useForm();
+	const [formData, setFormData] = useState({
+		name: "",
+		branch: "",
+		applicationNumber: "",
+		contactInfo: "",
+		email: "",
+	});
 
-	// const [formData, setFormData] = useState({
-	// 	name: "",
-	// 	branch: "",
-	// 	applicationNumber: "",
-	// 	contactInfo: "",
-	// 	email: "",
-	// });
-
-	// const handleChange = (e) => {
-	// 	const { name, value } = e.target;
-	// 	setFormData((prevData) => ({
-	// 		...prevData,
-	// 		[name]: value,
-	// 	}));
-	// };
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+	};
 
 	// Function to check if the application number is unique
 	const isApplicationNumberUnique = (applicationNumber) => {
-		const usedNumbers =
-			JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
+		const usedNumbers = JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
 		return !usedNumbers.includes(applicationNumber);
 	};
-	const validateFormData = (data) => {
-		const { name, branch, applicationNumber, contactInfo, email } = data;
-		return name && branch && applicationNumber && contactInfo && email;
-		// Add more validation logic if needed (e.g., email format, contact number format)
-	};
 
-	const onSubmit = (data) => {
-		// e.preventDefault();
-		console.log(data);
-		// if (errors) {
-		// 	alert("Please fill all the fields.");
-		// 	return;
-		// }
-
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+	
 		// Check if the application number has already been used
-		if (!isApplicationNumberUnique(data.applicationNumber)) {
-			alert(
-				"This application number has already been used. Please use a different one."
-			);
+		if (!isApplicationNumberUnique(formData.applicationNumber)) {
+			alert("This application number has already been used. Please use a different one.");
 			return;
 		}
-
-		// If unique, store the application number and submit the form
-		const usedNumbers =
-			JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
-		usedNumbers.push(data.applicationNumber);
-		localStorage.setItem("usedApplicationNumbers", JSON.stringify(usedNumbers));
-
-		alert("Form filled. Thank you!");
-		console.log("Form Data:", data);
-
-		//  reset the form after submission
-		// setFormData({
-		// 	name: "",
-		// 	branch: "",
-		// 	applicationNumber: "",
-		// 	contactInfo: "",
-		// 	email: "",
-		// });
-		reset();
+	
+		try {
+			const response = await fetch('http://localhost:3000/form.jsx', { // Updated URL
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					username: formData.applicationNumber,
+					name: formData.name,
+					rollno: formData.applicationNumber,
+					emailid: formData.email,
+					phoneno: formData.contactInfo,
+					branch: formData.branch,
+				}),
+			})
+			
+	
+			if (response.ok) {
+				alert("Form submitted successfully!");
+				console.log("Form Data:", formData);
+	
+				// Reset the form after successful submission
+				setFormData({
+					name: "",
+					branch: "",
+					applicationNumber: "",
+					contactInfo: "",
+					email: "",
+				});
+	
+				// Update the local storage with the new application number
+				const usedNumbers = JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
+				usedNumbers.push(formData.applicationNumber);
+				localStorage.setItem("usedApplicationNumbers", JSON.stringify(usedNumbers));
+			} else {
+				const errorText = await response.text();
+				alert(`Failed to submit form: ${errorText}`);
+			}
+		} catch (error) {
+			console.error("Error submitting form:", error);
+			alert("An error occurred while submitting the form. Please try again later.");
+		}
 	};
-
-	const Error = function ({ message }) {
-		return <span style={{ display: "block", color: "wheat" }}>{message}</span>;
-	};
+	
 
 	return (
 		<div className="form-container">
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="glassmorphism"
-			>
+			<form onSubmit={handleSubmit} className="glassmorphism">
 				<div className="logo-container">
-					<img
-						src={logo}
-						alt="ISTE Thapar Chapter Logo"
-						className="logo"
-					/>
+					<img src={logo} alt="ISTE Thapar Chapter Logo" className="logo" />
 				</div>
 				<h2 className="title">ORIENTATION</h2>
 				<input
 					type="text"
+					name="name"
 					placeholder="Name"
-					{...register("name", {
-						required: "Name is Required.",
-						minLength: {
-							value: 1,
-							message: "Name should be atleast 1 characters long.",
-						},
-					})}
+					value={formData.name}
+					onChange={handleChange}
+					required
 					aria-label="Name"
 				/>
-				{errors.name && Error({ message: errors.name.message })}
-
 				<input
 					type="text"
+					name="branch"
 					placeholder="Branch"
-					{...register("branch", { required: "Branch is Required." })}
+					value={formData.branch}
+					onChange={handleChange}
+					required
 					aria-label="Branch"
 				/>
-				{errors.branch && Error({ message: errors.branch.message })}
-
 				<input
 					type="text"
+					name="applicationNumber"
 					placeholder="Application Number"
-					{...register("applicationNumber", {
-						required: "Application Number is Required.",
-						validate: (value) => {
-							if (value.length !== 6) {
-								return "Invalid Application Number.";
-							}
-							if (isNaN(value)) {
-								return "Application Number should be a number";
-							}
-						},
-					})}
+					value={formData.applicationNumber}
+					onChange={handleChange}
+					required
 					aria-label="Application Number"
 				/>
-				{errors.applicationNumber &&
-					Error({ message: errors.applicationNumber.message })}
-
 				<input
 					type="text"
+					name="contactInfo"
 					placeholder="Contact Info"
-					{...register("contactInfo", {
-						required: "Contact Info is Required.",
-						validate: (value) => {
-							if (value.length !== 10) {
-								return "Invalid Number.";
-							}
-							if (isNaN(value)) {
-								return "Contact Info should be a number.";
-							}
-						},
-					})}
+					value={formData.contactInfo}
+					onChange={handleChange}
+					required
 					aria-label="Contact Info"
 				/>
-				{errors.contactInfo && Error({ message: errors.contactInfo.message })}
-
 				<input
 					type="email"
+					name="email"
 					placeholder="Email"
-					{...register("email", {
-						required: "Email is Required.",
-						pattern: {
-							value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$/,
-							message: "Invalid Email.",
-						},
-					})}
+					value={formData.email}
+					onChange={handleChange}
+					required
 					aria-label="Email"
 				/>
-				{errors.email && Error({ message: errors.email.message })}
-				<button
-					type="submit"
-					style={{ marginTop: "1rem" }}
-				>
-					{isSubmitting ? "Registering..." : "Register"}
-				</button>
+				<button type="submit">Register</button>
 			</form>
 		</div>
 	);
