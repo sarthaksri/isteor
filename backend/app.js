@@ -35,14 +35,17 @@ mongoose.connect(mongoURI, {
         console.error("MongoDB connection error:", err);
     });
 
-// Serve static files from the React app
-app.use(express.static(path.join(path.dirname(fileURLToPath(import.meta.url)), 'client/build')));
+// // Serve static files from the React app
+// app.use(express.static(path.join(path.dirname(fileURLToPath(import.meta.url)), 'client/build')));
 
-// For any other request, serve the index.html from the React app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(path.dirname(fileURLToPath(import.meta.url)), 'client/build', 'index.html'));
-});
+// // For any other request, serve the index.html from the React app
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(path.dirname(fileURLToPath(import.meta.url)), 'client/build', 'index.html'));
+// });
 
+app.get('/', (req, res) =>{
+    res.send("Server is up");
+})
 // Route to handle form submission (POST user data)
 app.post('/form.jsx', async (req, res) => {
     const { username, name, rollno, emailid, phoneno, branch } = req.body;
