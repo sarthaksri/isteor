@@ -1,11 +1,19 @@
 {
-   "version": 2,
-   "name": "backend",
-   "builds": [
-     { "src": "./app.js", "use": "@vercel/node" }
-   ],
-   "routes": [
-     { "src": "/api/(.*)", "dest": "/app.js" }
-   ]
- }
- 
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "index.js"
+    }
+  ],
+  "env": {
+    "PORT": "5000",
+    "MONGO_URI": "mongodb+srv://vinayakjainlife:suddendeath123%40@cluster0.efw6gnu.mongodb.net/iste"
+  }
+}

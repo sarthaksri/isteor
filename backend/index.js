@@ -9,21 +9,18 @@ import User from './module/User.js'
 
 
 const app = express();
-const port = process.env.PORT || 3000; // Use environment variable for port or fallback to 3000
+const port = process.env.PORT || 5000; // Use environment variable for port or fallback to 3000
 import cors from 'cors';
 app.use(cors());
 
-// Middleware for serving static files from the 'public' directory
-app.use(express.static(path.join(path.dirname(fileURLToPath(import.meta.url)), 'public')));
+// // Middleware for serving static files from the 'public' directory
+// app.use(express.static(path.join(path.dirname(fileURLToPath(import.meta.url)), 'public')));
 
-// Middleware for parsing JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// // Middleware for parsing JSON and URL-encoded data
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
-const mongoURI =  'mongodb+srv://vinayakjainlife:suddendeath123%40@cluster0.efw6gnu.mongodb.net/iste'; // Use environment variable for MongoDB URI
-
-mongoose.connect(mongoURI, {
+mongoose.connect(process.env.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     ssl: true
