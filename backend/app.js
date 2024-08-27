@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-const mongoURI =  'mongodb+srv://vinayakjainlife:suddendeath123%40@cluster0.efw6gnu.mongodb.net/demo'; // Use environment variable for MongoDB URI
+const mongoURI =  'mongodb+srv://vinayakjainlife:suddendeath123%40@cluster0.efw6gnu.mongodb.net/iste'; // Use environment variable for MongoDB URI
 
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
