@@ -54,11 +54,16 @@ body {
   position: absolute;
   top: 10px;
   left: 10px;
+
 }
 
 .logo {
   width: 150px;
   height: 100 px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .title {
@@ -73,6 +78,17 @@ body {
   display: inline-block;
 
 }
+/* Hide spinner controls in input fields of type number */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 
 
 .glassmorphism input {

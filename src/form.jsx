@@ -1,137 +1,158 @@
-import React, { useState } from "react";
 import "./form.css";
 import logo from "./ISTE Thapar Chapter Logo .png";
+import { useForm } from "react-hook-form";
 
 function RegistrationForm() {
-	const [formData, setFormData] = useState({
-		name: "",
-		branch: "",
-		applicationNumber: "",
-		contactInfo: "",
-		email: "",
-	});
-
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
-	};
+	const {
+		register,
+		handleSubmit,
+		formState: { isSubmitting, errors },
+		reset,
+	} = useForm();
 
 	// Function to check if the application number is unique
 	const isApplicationNumberUnique = (applicationNumber) => {
-		const usedNumbers = JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
+		const usedNumbers =
+			JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
 		return !usedNumbers.includes(applicationNumber);
 	};
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-	
+	const onSubmit = async (data) => {
 		// Check if the application number has already been used
-		if (!isApplicationNumberUnique(formData.applicationNumber)) {
-			alert("This application number has already been used. Please use a different one.");
+		if (!isApplicationNumberUnique(data.applicationNumber)) {
+			alert(
+				"This application number has already been used. Please use a different one."
+			);
 			return;
 		}
-	
+
+		// If unique, store the application number locally
+		const usedNumbers =
+			JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
+		usedNumbers.push(data.applicationNumber);
+		localStorage.setItem("usedApplicationNumbers", JSON.stringify(usedNumbers));
+
 		try {
-			const response = await fetch('https://isteor-server-git-main-sarthaksris-projects.vercel.app/form.jsx', { // Updated URL
-				method: 'POST',
+			// Make a POST request to the provided API endpoint
+			const response = await fetch("https://isteor-server-git-main-sarthaksris-projects.vercel.app/form.jsx", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					username: formData.applicationNumber,
-					name: formData.name,
-					rollno: formData.applicationNumber,
-					emailid: formData.email,
-					phoneno: formData.contactInfo,
-					branch: formData.branch,
+					username: data.applicationNumber,
+					name: data.name,
+					rollno: data.applicationNumber,
+					emailid: data.email,
+					phoneno: data.contactInfo,
+					branch: data.branch,
 				}),
-			})
-			
-	
+			});
+
+			// Check if the response is ok
 			if (response.ok) {
 				alert("Form submitted successfully!");
-				console.log("Form Data:", formData);
-	
+				console.log("Form Data:", data);
+
 				// Reset the form after successful submission
-				setFormData({
-					name: "",
-					branch: "",
-					applicationNumber: "",
-					contactInfo: "",
-					email: "",
-				});
-	
-				// Update the local storage with the new application number
-				const usedNumbers = JSON.parse(localStorage.getItem("usedApplicationNumbers")) || [];
-				usedNumbers.push(formData.applicationNumber);
-				localStorage.setItem("usedApplicationNumbers", JSON.stringify(usedNumbers));
+				reset();
 			} else {
 				const errorText = await response.text();
 				alert(`Failed to submit form: ${errorText}`);
 			}
 		} catch (error) {
+			// Handle network or other errors
 			console.error("Error submitting form:", error);
-			alert("An error occurred while submitting the form. Please try again later.");
+			alert("There was an error submitting the form. Please try again later.");
 		}
 	};
-	
+
+	const Error = function ({ message }) {
+		return <span style={{ display: "block", color: "wheat" }}>{message}</span>;
+	};
 
 	return (
 		<div className="form-container">
-			<form onSubmit={handleSubmit} className="glassmorphism">
+			<form onSubmit={handleSubmit(onSubmit)} className="glassmorphism">
 				<div className="logo-container">
 					<img src={logo} alt="ISTE Thapar Chapter Logo" className="logo" />
 				</div>
 				<h2 className="title">ORIENTATION</h2>
 				<input
 					type="text"
-					name="name"
 					placeholder="Name"
-					value={formData.name}
-					onChange={handleChange}
-					required
+					{...register("name", {
+						required: "Name is Required.",
+						minLength: {
+							value: 1,
+							message: "Name should be at least 1 character long.",
+						},
+					})}
 					aria-label="Name"
 				/>
+				{errors.name && <Error message={errors.name.message} />}
+
 				<input
 					type="text"
-					name="branch"
 					placeholder="Branch"
-					value={formData.branch}
-					onChange={handleChange}
-					required
+					{...register("branch", { required: "Branch is Required." })}
 					aria-label="Branch"
 				/>
+				{errors.branch && <Error message={errors.branch.message} />}
+
 				<input
-					type="text"
-					name="applicationNumber"
+					type="number"
 					placeholder="Application Number"
-					value={formData.applicationNumber}
-					onChange={handleChange}
-					required
+					{...register("applicationNumber", {
+						required: "Application Number is Required.",
+						validate: (value) => {
+							if (value.length !== 6) {
+								return "Invalid Application Number.";
+							}
+							if (isNaN(value)) {
+								return "Application Number should be a number";
+							}
+						},
+					})}
 					aria-label="Application Number"
 				/>
+				{errors.applicationNumber && <Error message={errors.applicationNumber.message} />}
+
 				<input
-					type="text"
-					name="contactInfo"
+					type="number"
 					placeholder="Contact Info"
-					value={formData.contactInfo}
-					onChange={handleChange}
-					required
+					{...register("contactInfo", {
+						required: "Contact Info is Required.",
+						validate: (value) => {
+							if (value.length !== 10) {
+								return "Invalid Number.";
+							}
+							if (isNaN(value)) {
+								return "Contact Info should be a number.";
+							}
+						},
+					})}
 					aria-label="Contact Info"
 				/>
+				{errors.contactInfo && <Error message={errors.contactInfo.message} />}
+
 				<input
 					type="email"
-					name="email"
 					placeholder="Email"
-					value={formData.email}
-					onChange={handleChange}
-					required
+					{...register("email", {
+						required: "Email is Required.",
+						pattern: {
+							value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$/,
+							message: "Invalid Email.",
+						},
+					})}
 					aria-label="Email"
 				/>
-				<button type="submit">Register</button>
+				{errors.email && <Error message={errors.email.message} />}
+				
+				<button type="submit" style={{ marginTop: "1rem" }}>
+					{isSubmitting ? "Registering..." : "Register"}
+				</button>
 			</form>
 		</div>
 	);
