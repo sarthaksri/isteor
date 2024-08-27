@@ -35,7 +35,7 @@ function RegistrationForm() {
 		}
 	
 		try {
-			const response = await fetch('http://localhost:3000/form.jsx', { // Updated URL
+			const response = await fetch('https://isteor-server-git-main-sarthaksris-projects.vercel.app/form.jsx', { // Updated URL
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
