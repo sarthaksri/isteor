@@ -45,7 +45,7 @@ app.get('/', (req, res) =>{
 })
 // Route to handle form submission (POST user data)
 app.post('/form.jsx', async (req, res) => {
-    const { username, name, rollno, emailid, phoneno, branch } = req.body;
+    const {username, name, rollno, emailid, phoneno, branch } = req.body;
     try {
         const user = new User({ username, name, rollno, emailid, phoneno, branch });
         const savedUser = await user.save();
