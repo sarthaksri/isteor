@@ -12,6 +12,8 @@ const app = express();
 const port = process.env.PORT || 5000; // Use environment variable for port or fallback to 3000
 import cors from 'cors';
 app.use(cors());
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // // Middleware for serving static files from the 'public' directory
 // app.use(express.static(path.join(path.dirname(fileURLToPath(import.meta.url)), 'public')));
@@ -20,17 +22,21 @@ app.use(cors());
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true
-})
-    .then(() => {
-        console.log("MongoDB connected");
-    })
-    .catch(err => {
-        console.error("MongoDB connection error:", err);
-    });
+// MongoDB connection using async/await
+const connectDB = async () => {
+    try {
+      await mongoose.connect(process.env.mongoURI, {
+        ssl: true,
+      });
+      console.log('MongoDB connected');
+    } catch (error) {
+      console.error('MongoDB connection error:', error);
+      process.exit(1); // Exit process with failure if unable to connect
+    }
+  };
+  
+  // Call the connectDB function to establish connection
+  connectDB();
 
 // // Serve static files from the React app
 // app.use(express.static(path.join(path.dirname(fileURLToPath(import.meta.url)), 'client/build')));
